@@ -1,12 +1,15 @@
 {
   "name": "chai-leaflet",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Chai assertions to use with Leaflet map apps",
   "main": "chai-leaflet.js",
   "scripts": {
     "test": "mocha-phantomjs test/index.html"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jieter/chai-leaflet.git"
+  },
   "keywords": [
     "chai",
     "testing",
