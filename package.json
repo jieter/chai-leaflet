@@ -1,0 +1,29 @@
+{
+  "name": "chai-leaflet",
+  "version": "0.0.0",
+  "description": "Chai assertions to use with Leaflet map apps",
+  "main": "chai-leaflet.js",
+  "scripts": {
+    "test": "mocha-phantomjs test/index.html"
+  },
+  "repository": "",
+  "keywords": [
+    "chai",
+    "testing",
+    "assertions",
+    "leaflet",
+    "map",
+    "gis"
+  ],
+  "author": "Jan Pieter Waagmeester <jieter@jieter.nl>",
+  "license": "MIT",
+  "devDependencies": {
+    "leaflet": "~0.6.4",
+    "chai": "~1.8.1",
+    "mocha-phantomjs": "~3.1.5",
+    "mocha": "~1.14.0"
+  },
+  "peerDependencies": {
+    "chai": ">= 1.7.0 < 2"
+  },
+}

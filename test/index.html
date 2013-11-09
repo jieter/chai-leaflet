@@ -1,0 +1,27 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>chai-leaflet Tests</title>
+	<link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.css" />
+</head>
+<body>
+	<div id="mocha"></div>
+
+	<script src="http://cdn.leafletjs.com/leaflet-0.6.4/leaflet-src.js"></script>
+
+	<script src="../node_modules/chai/chai.js"></script>
+	<script src="../node_modules/mocha/mocha.js"></script>
+	<script src="../chai-leaflet.js"></script>
+	<script>
+		mocha.setup('bdd');
+	</script>
+
+	<script src="test.js"></script>
+
+	<script>
+		mocha.globals(['L']);
+		(window.mochaPhantomJS || mocha).run();
+	</script>
+</body>
+</html>
