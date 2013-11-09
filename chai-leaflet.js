@@ -29,9 +29,12 @@
 	}
 
 	function deepAlmostEqual(actual, expected, delta) {
+		if (delta === undefined) {
+			throw new Error('No delta provided');
+		}
 		if (Object(actual) === actual && Object(expected) === expected) {
 			for (var i in actual) {
-				if (!deepAlmostEqual(actual[i], expected[i])) {
+				if (!deepAlmostEqual(actual[i], expected[i], delta)) {
 					return false;
 				}
 			}
@@ -41,25 +44,39 @@
 		}
 	}
 
+	Assertion.addMethod('deepAlmostEqual', function (expected, delta) {
+		this.assert(
+			deepAlmostEqual(this._obj, expected, delta),
+			'expected #{act} to be almost equal to #{exp}',
+			'expected #{act} to be not almost equal to #{exp}',
+			expected,
+			this._obj
+		);
+	});
+
 	Assertion.addMethod('nearLatLng', function (expected, delta) {
 		delta = delta || 1e-4;
 
-		var latlng = this._obj;
+		var actual = this._obj;
 
-		return new Assertion(
-			deepAlmostEqual(latlng, expected, delta),
-			'expected #{this} to be near #{exp}',
-			'expected #{this} not to be near #{exp}'
+		this.assert(
+			deepAlmostEqual(actual, expected, delta),
+			'expected #{act} to be near #{exp}',
+			'expected #{act} not to be near #{exp}',
+			expected.toString(),
+			actual.toString()
 		);
 	});
 
 	Assertion.addMethod('zoom', function (zoom) {
-		var map = this._obj;
+		var actual = this._obj.getZoom();
 
-		return new chai.Assertion(
-			map.getZoom() === zoom,
-			'expected zoom #{this} to be #{exp}',
-			'expected zoom #{this} not to be #{exp}'
+		this.assert(
+			actual === zoom,
+			'expected zoom #{act} to be #{exp}',
+			'expected zoom #{act} not to be #{exp}',
+			zoom,
+			actual
 		);
 	});
 

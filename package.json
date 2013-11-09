@@ -1,6 +1,6 @@
 {
   "name": "chai-leaflet",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Chai assertions to use with Leaflet map apps",
   "main": "chai-leaflet.js",
   "scripts": {
@@ -27,6 +27,6 @@
     "mocha": "~1.14.0"
   },
   "peerDependencies": {
-    "chai": ">= 1.7.0 < 2"
+    "chai": ">= 1.8.1 < 2"
   }
 }

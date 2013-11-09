@@ -1,7 +1,26 @@
 'use strict';
 
+
 describe('chai-leaflet', function () {
 	chai.should();
+
+	describe('deepAlmostEqual', function () {
+		it('array of numbers', function () {
+			[1, 2].should.be.deepAlmostEqual([1, 2], 0.1);
+			[1, 2].should.not.be.deepAlmostEqual([1, 3], 0.1);
+		});
+		it('objects', function () {
+			var obj = {
+				foo: [1, 3.00],
+				floats: 0.3234,
+				options: {
+					center: [3, 4]
+				}
+			};
+
+			obj.should.be.deepAlmostEqual(obj, 0.1);
+		});
+	});
 
 	describe('nearLatLng', function () {
 		it('works', function () {
