@@ -54,10 +54,11 @@
 		);
 	});
 
-	Assertion.addMethod('nearLatLng', function (expected, delta) {
+	function nearLatLng(expected, delta) {
 		delta = delta || 1e-4;
 
 		var actual = this._obj;
+		var expected = L.latLng(expected);
 
 		this.assert(
 			deepAlmostEqual(actual, expected, delta),
@@ -66,7 +67,9 @@
 			expected.toString(),
 			actual.toString()
 		);
-	});
+	}
+	Assertion.addMethod('nearLatLng', nearLatLng);
+	Assertion.addMethod('near', nearLatLng);
 
 	Assertion.addMethod('zoom', function (zoom) {
 		var actual = this._obj.getZoom();

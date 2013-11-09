@@ -7,6 +7,9 @@ describe('chai-leaflet', function () {
 	describe('deepAlmostEqual', function () {
 		it('array of numbers', function () {
 			[1, 2].should.be.deepAlmostEqual([1, 2], 0.1);
+			[1.0, 2.0].should.be.deepAlmostEqual([1, 2], 0.1);
+			[1.01, 2.02].should.be.deepAlmostEqual([1, 2], 0.1);
+
 			[1, 2].should.not.be.deepAlmostEqual([1, 3], 0.1);
 		});
 		it('objects', function () {
@@ -26,8 +29,9 @@ describe('chai-leaflet', function () {
 		it('works', function () {
 			var latlng = L.latLng(51, 4);
 
-			latlng.should.be.nearLatLng(latlng);
-			latlng.should.not.be.nearLatLng(L.latLng([4, 51]));
+			latlng.should.be.near(latlng);
+			latlng.should.be.near([51, 4]);
+			latlng.should.not.be.near(L.latLng([4, 51]));
 		});
 
 		it('with bigger delta', function () {
@@ -35,8 +39,8 @@ describe('chai-leaflet', function () {
 
 			var delta = 0.1;
 
-			latlng.should.be.nearLatLng(L.latLng(51.01, 4.01), delta);
-			latlng.should.not.be.nearLatLng(L.latLng(51.4, 4.4), delta);
+			latlng.should.be.near(L.latLng(51.01, 4.01), delta);
+			latlng.should.not.be.near(L.latLng(51.4, 4.4), delta);
 		});
 	});
 
