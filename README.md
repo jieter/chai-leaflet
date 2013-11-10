@@ -1,6 +1,6 @@
 # chai-leaflet
 
-Chai assertions to test leaflet apps.
+Chai assertions to test Leaflet apps. Most stuff is currently only for the browser, because `L` is expected to be defined and Leaflet needs a `window` object to function.
 
 ## examples
 ```JavaScript
