@@ -8,10 +8,25 @@ describe('chai-leaflet', function () {
 			[1, 2].should.be.deepAlmostEqual([1, 2], 0.1);
 			[1.0, 2.0].should.be.deepAlmostEqual([1, 2], 0.1);
 			[1.01, 2.02].should.be.deepAlmostEqual([1, 2], 0.1);
-
-			[1, 2].should.not.be.deepAlmostEqual([1, 3], 0.1);
 		});
-		it('objects', function () {
+
+		it('negated version', function () {
+			[1, 2].should.not.be.deepAlmostEqual([1, 3], 1);
+		});
+
+		it('nested arrays with numbers', function () {
+			var array = [
+				[1.001, 1002],
+				[1, 2],
+				[3, 4],
+				[ [4, 5], [5, 6] ],
+				3.44
+			];
+
+			array.should.be.deepAlmostEqual(array, 0.1);
+		});
+
+		it('map with arrays and numbers', function () {
 			var obj = {
 				foo: [1, 3.00],
 				floats: 0.3234,
@@ -22,6 +37,7 @@ describe('chai-leaflet', function () {
 
 			obj.should.be.deepAlmostEqual(obj, 0.1);
 		});
+
 	});
 
 	describe('nearLatLng', function () {
@@ -30,6 +46,10 @@ describe('chai-leaflet', function () {
 
 			latlng.should.be.near(latlng);
 			latlng.should.be.near([51, 4]);
+		});
+
+		it('negating works', function () {
+			var latlng = L.latLng(51, 4);
 			latlng.should.not.be.near(L.latLng([4, 51]));
 		});
 

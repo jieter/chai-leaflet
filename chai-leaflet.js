@@ -32,16 +32,26 @@
 		if (delta === undefined) {
 			throw new Error('No delta provided');
 		}
-		if (Object(actual) === actual && Object(expected) === expected) {
-			for (var i in actual) {
+
+		if (Array.isArray(actual)) {
+			for (var i = 0; i < actual.length; i++) {
 				if (!deepAlmostEqual(actual[i], expected[i], delta)) {
 					return false;
 				}
 			}
-			return true;
+		} else if (typeof actual === 'object') {
+			for (var i in actual) {
+				if (typeof actual[i] === 'function') {
+					 continue;
+				}
+				if (!deepAlmostEqual(actual[i], expected[i], delta)) {
+					return false;
+				}
+			}
 		} else {
 			return almostEqual(actual, expected, delta);
 		}
+		return true;
 	}
 
 	Assertion.addMethod('deepAlmostEqual', function (expected, delta) {
@@ -58,6 +68,11 @@
 		delta = delta || 1e-4;
 
 		var actual = this._obj;
+		// TODO fix this for negating
+		// this.assert(
+		// 	actual instanceof L.LatLng,
+		// 	'expected #{act} to be a L.LatLng object'
+		// );
 		var expected = L.latLng(expected);
 
 		this.assert(
