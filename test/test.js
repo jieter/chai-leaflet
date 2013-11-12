@@ -1,6 +1,5 @@
 'use strict';
 
-
 describe('chai-leaflet', function () {
 	chai.should();
 
