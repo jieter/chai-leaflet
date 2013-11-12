@@ -33,16 +33,17 @@
 			throw new Error('No delta provided');
 		}
 
+		var i;
 		if (Array.isArray(actual)) {
-			for (var i = 0; i < actual.length; i++) {
+			for (i = 0; i < actual.length; i++) {
 				if (!deepAlmostEqual(actual[i], expected[i], delta)) {
 					return false;
 				}
 			}
 		} else if (typeof actual === 'object') {
-			for (var i in actual) {
+			for (i in actual) {
 				if (typeof actual[i] === 'function') {
-					 continue;
+					continue;
 				}
 				if (!deepAlmostEqual(actual[i], expected[i], delta)) {
 					return false;
@@ -67,13 +68,14 @@
 	function nearLatLng(expected, delta) {
 		delta = delta || 1e-4;
 
+		/* jshint validthis:true */
+		new Assertion(
+			this._obj,
+			'expected #{act} to be a L.LatLng object'
+		).to.be.an.instanceof(L.LatLng);
+
 		var actual = this._obj;
-		// TODO fix this for negating
-		// this.assert(
-		// 	actual instanceof L.LatLng,
-		// 	'expected #{act} to be a L.LatLng object'
-		// );
-		var expected = L.latLng(expected);
+		expected = L.latLng(expected);
 
 		this.assert(
 			deepAlmostEqual(actual, expected, delta),
@@ -87,6 +89,16 @@
 	Assertion.addMethod('near', nearLatLng);
 
 	Assertion.addMethod('zoom', function (zoom) {
+		new Assertion(
+			this._obj,
+			'expected #{act} to be a L.Map'
+		).to.be.an.instanceof(L.Map);
+
+		new Assertion(
+			zoom,
+			'expect zoom to be a number'
+		).to.be.a('number');
+
 		var actual = this._obj.getZoom();
 
 		this.assert(
@@ -99,6 +111,11 @@
 	});
 
 	Assertion.addMethod('view', function (center, zoom, delta) {
+		new Assertion(
+			this._obj,
+			'expected #{act} to be a L.Map'
+		).to.be.an.instanceof(L.Map);
+
 		var map = this._obj;
 
 		L.latLng(center)

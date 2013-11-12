@@ -40,47 +40,67 @@ describe('chai-leaflet', function () {
 
 	});
 
-	describe('nearLatLng', function () {
-		it('works', function () {
-			var latlng = L.latLng(51, 4);
+	describe('should.be.', function () {
+		describe('near', function () {
+			it('works', function () {
+				var latlng = L.latLng(51, 4);
 
-			latlng.should.be.near(latlng);
-			latlng.should.be.near([51, 4]);
-		});
+				latlng.should.be.near(latlng);
+				latlng.should.be.near([51, 4]);
+			});
 
-		it('negating works', function () {
-			var latlng = L.latLng(51, 4);
-			latlng.should.not.be.near(L.latLng([4, 51]));
-		});
+			it('negating works', function () {
+				var latlng = L.latLng(51, 4);
+				latlng.should.not.be.near(L.latLng([4, 51]));
+			});
 
-		it('with bigger delta', function () {
-			var latlng = L.latLng(51.0001, 4.0009);
+			it('with bigger delta', function () {
+				var latlng = L.latLng(51.0001, 4.0009);
 
-			var delta = 0.1;
+				var delta = 0.1;
 
-			latlng.should.be.near(L.latLng(51.01, 4.01), delta);
-			latlng.should.not.be.near(L.latLng(51.4, 4.4), delta);
-		});
-	});
-
-	describe('should.have.zoom', function () {
-		it('checks zoom correctly', function () {
-			var map = L.map(document.createElement('div'));
-
-			map.setView([1, 2], 3);
-
-			map.should.have.zoom(3);
-			map.should.not.have.zoom(4);
+				latlng.should.be.near(L.latLng(51.01, 4.01), delta);
+				latlng.should.not.be.near(L.latLng(51.4, 4.4), delta);
+			});
 		});
 	});
 
-	describe('should.have.view', function () {
-		it('checks view correctly', function () {
-			var map = L.map(document.createElement('div'));
+	describe('should.have.', function () {
+		describe('zoom', function () {
+			it('fails for non-map objects', function () {
+				var fn = function () {
+					L.latLng([1, 2]).should.have.zoom([1, 2]);
+				};
 
-			map.setView([1, 2], 3);
+				fn.should.throw;
+			});
 
-			map.should.have.view([1, 2], 3);
+			it('checks zoom correctly', function () {
+				var map = L.map(document.createElement('div'));
+
+				map.setView([1, 2], 3);
+
+				map.should.have.zoom(3);
+				map.should.not.have.zoom(4);
+			});
+		});
+
+		describe('view', function () {
+			it('fails for non-map objects', function () {
+				var fn = function () {
+					L.latLng([1, 2]).should.have.view([1, 2]);
+				};
+
+				fn.should.throw;
+			});
+
+			it('checks view correctly', function () {
+				var map = L.map(document.createElement('div'));
+
+				map.setView([1, 2], 3);
+
+				map.should.have.view([1, 2], 3);
+			});
 		});
 	});
 });
