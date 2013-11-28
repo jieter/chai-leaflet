@@ -38,6 +38,50 @@ describe('chai-leaflet', function () {
 			obj.should.be.deepAlmostEqual(obj, 0.1);
 		});
 
+		describe('error messages', function () {
+			var error, fn;
+			beforeEach(function () {
+				error = '';
+				fn = null;
+			});
+
+			it('should report the right index', function () {
+				fn = function () {
+					[1, 2, 3, 4].should.be.deepAlmostEqual([1, 2, 3, 5], 0.1);
+				};
+
+				fn.should.throw('expected [ 1, 2, 3, 4 ] to be almost equal to [ 1, 2, 3, 5 ] at index 3');
+			});
+			it('should display the second level if type is array/object', function () {
+				fn = function () {
+					[
+						[1, 2],
+						[2, 3]
+					].should.be.deepAlmostEqual([
+						[1, 2],
+						[4, 4]
+					], 0.1);
+				};
+				fn.should.throw('expected [ [ 1, 2 ], [ 2, 3 ] ] to be almost equal to ' +
+					'[ [ 1, 2 ], [ 4, 4 ] ] at index 1: 2,3 should be almost equal to 4,4');
+			});
+
+			it('should report the key for objects', function () {
+				fn = function () {
+					var obj = {
+						foo: [1, 2],
+						bar: [1, 2, 3]
+					};
+
+					obj.should.be.deepAlmostEqual({
+						foo: [1, 2],
+						bar: [1, 3, 4]
+					}, 0.1);
+				};
+				fn.should.throw('expected { foo: [ 1, 2 ], bar: [ 1, 2, 3 ] } to be almost equal to ' +
+					'{ foo: [ 1, 2 ], bar: [ 1, 3, 4 ] } at key bar: 1,2,3 should be almost equal to 1,3,4');
+			});
+		});
 	});
 
 	describe('should.be.', function () {

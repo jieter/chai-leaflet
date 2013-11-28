@@ -28,15 +28,22 @@
 		return Math.abs(a - b) < delta;
 	}
 
-	function deepAlmostEqual(actual, expected, delta) {
+	function deepAlmostEqual(actual, expected, delta, error) {
 		if (delta === undefined) {
 			throw new Error('No delta provided');
 		}
+		error = error || {};
+		error.message = '';
 
 		var i;
 		if (Array.isArray(actual)) {
 			for (i = 0; i < actual.length; i++) {
 				if (!deepAlmostEqual(actual[i], expected[i], delta)) {
+					error.message = ' at index ' + i;
+					if (Array.isArray(actual[i]) || typeof actual[i] === 'object') {
+						error.message += ': ' + actual[i] + ' should be almost equal to ' + expected[i];
+					}
+
 					return false;
 				}
 			}
@@ -46,6 +53,11 @@
 					continue;
 				}
 				if (!deepAlmostEqual(actual[i], expected[i], delta)) {
+					error.message = ' at key ' + i;
+					if (Array.isArray(actual[i]) || typeof actual[i] === 'object') {
+						error.message += ': ' + actual[i] + ' should be almost equal to ' + expected[i];
+					}
+
 					return false;
 				}
 			}
@@ -56,10 +68,11 @@
 	}
 
 	Assertion.addMethod('deepAlmostEqual', function (expected, delta) {
+		var error = {};
 		this.assert(
-			deepAlmostEqual(this._obj, expected, delta),
-			'expected #{act} to be almost equal to #{exp}',
-			'expected #{act} to be not almost equal to #{exp}',
+			deepAlmostEqual(this._obj, expected, delta, error),
+			'expected #{act} to be almost equal to #{exp}' + error.message,
+			'expected #{act} to be not almost equal to #{exp}' + error.message,
 			expected,
 			this._obj
 		);
