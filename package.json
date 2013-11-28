@@ -1,6 +1,6 @@
 {
   "name": "chai-leaflet",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Chai assertions to use with Leaflet map apps",
   "main": "chai-leaflet.js",
   "scripts": {
