@@ -3,25 +3,20 @@
  *
  * Jan Pieter Waagmeester <jieter@jieter.nl>
  */
-(function (chaiLeaflet) {
-	'use strict';
+(function (factory, window) {
 
-	// Module systems magic dance.
-	if (typeof require === 'function' && typeof exports === 'object' && typeof module === 'object') {
-		// NodeJS
-		module.exports = chaiLeaflet;
-	} else if (typeof define === 'function' && define.amd) {
-		// AMD
-		define(function () {
-			return chaiLeaflet;
-		});
-	} else {
-		// Other environment (usually <script> tag): plug in to global chai instance directly.
-		chai.use(chaiLeaflet);
+	// define an AMD module that relies on 'chai'
+	if (typeof define === 'function' && define.amd) {
+		define(['chai'], factory);
+	// define a Common JS module that relies on 'chai'
+	} else if (typeof exports === 'object') {
+		module.exports = factory(require('chai'));
 	}
-}(function chaiLeaflet(chai) {
-	'use strict';
 
+	if (typeof window !== 'undefined' && typeof chai !== 'undefined') {
+		chai.use(factory);
+	}
+}(function (chai) {
 	var Assertion = chai.Assertion;
 
 	function almostEqual(a, b, delta) {
@@ -81,7 +76,6 @@
 	function nearLatLng(expected, delta) {
 		delta = delta || 1e-4;
 
-		/* jshint validthis:true */
 		new Assertion(
 			this._obj,
 			'expected #{act} to be a L.LatLng object'
@@ -138,4 +132,7 @@
 			map.should.have.zoom(zoom);
 		}
 	});
-}));
+
+	return chai;
+
+}, window));

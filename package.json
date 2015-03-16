@@ -4,7 +4,10 @@
   "description": "Chai assertions to use with Leaflet map apps",
   "main": "chai-leaflet.js",
   "scripts": {
-    "test": "mocha-phantomjs test/index.html"
+    "test": "npm run lint && npm run test-browser",
+    "lint": "eslint chai-leaflet.js",
+    "test-node": "mocha test/test.js",
+    "test-browser": "mocha-phantomjs test/index.html"
   },
   "repository": {
     "type": "git",
@@ -21,10 +24,12 @@
   "author": "Jan Pieter Waagmeester <jieter@jieter.nl>",
   "license": "MIT",
   "devDependencies": {
-    "leaflet": "~0.7.0",
     "chai": "~1.8.1",
-    "mocha-phantomjs": "~3.1.5",
-    "mocha": "~1.14.0"
+    "eslint": "^0.15.0",
+    "leaflet": "~0.7.0",
+    "mocha": "^2.2.1",
+    "mocha-phantomjs": "^3.5.3",
+    "phantomjs": "^1.9.16"
   },
   "peerDependencies": {
     "chai": ">= 1.8.1 < 2"
