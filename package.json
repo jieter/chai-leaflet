@@ -7,7 +7,8 @@
     "test": "npm run lint && npm run test-browser",
     "lint": "eslint chai-leaflet.js",
     "test-node": "mocha test/test.js",
-    "test-browser": "mocha-phantomjs test/index.html"
+    "test-browser": "mocha-phantomjs test/index.html",
+    "release": "mversion patch -m"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "leaflet": "~0.7.0",
     "mocha": "^2.2.1",
     "mocha-phantomjs": "^3.5.3",
+    "mversion": "^1.10.0",
     "phantomjs": "^1.9.16"
   },
   "peerDependencies": {
