@@ -15,6 +15,9 @@
 	<script src="../node_modules/mocha/mocha.js"></script>
 	<script src="../chai-leaflet.js"></script>
 	<script>
+		if (typeof initMochaPhantomJS === 'function') {
+			initMochaPhantomJS();
+		}
 		mocha.setup('bdd');
 	</script>
 
@@ -22,7 +25,7 @@
 
 	<script>
 		mocha.globals(['L']);
-		(window.mochaPhantomJS || mocha).run();
+		mocha.run();
 	</script>
 </body>
 </html>
