@@ -3,136 +3,133 @@
  *
  * Jan Pieter Waagmeester <jieter@jieter.nl>
  */
-(function (factory, window) {
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD
+        define(['chai'], factory);
+    } else if (typeof module !== 'undefined') {
+        // Node/CommonJS
+        module.exports = factory(require('chai'));
+    } else if (typeof window !== 'undefined') {
+        chai.use(factory);
+    }
+})(function (chai) {
+    var Assertion = chai.Assertion;
 
-	// define an AMD module that relies on 'chai'
-	if (typeof define === 'function' && define.amd) {
-		define(['chai'], factory);
-	// define a Common JS module that relies on 'chai'
-	} else if (typeof exports === 'object') {
-		module.exports = factory(require('chai'));
-	}
+    function almostEqual (a, b, delta) {
+        return Math.abs(a - b) < delta;
+    }
 
-	if (typeof window !== 'undefined' && typeof chai !== 'undefined') {
-		chai.use(factory);
-	}
-}(function (chai) {
-	var Assertion = chai.Assertion;
+    function deepAlmostEqual (actual, expected, delta, error) {
+        if (delta === undefined) {
+            throw new Error('No delta provided');
+        }
+        error = error || {};
+        error.message = '';
 
-	function almostEqual(a, b, delta) {
-		return Math.abs(a - b) < delta;
-	}
+        var i;
+        if (Array.isArray(actual)) {
+            for (i = 0; i < actual.length; i++) {
+                if (!deepAlmostEqual(actual[i], expected[i], delta)) {
+                    error.message = ' at index ' + i;
+                    if (Array.isArray(actual[i]) || typeof actual[i] === 'object') {
+                        error.message += ': ' + actual[i] + ' should be almost equal to ' + expected[i];
+                    }
 
-	function deepAlmostEqual(actual, expected, delta, error) {
-		if (delta === undefined) {
-			throw new Error('No delta provided');
-		}
-		error = error || {};
-		error.message = '';
+                    return false;
+                }
+            }
+        } else if (typeof actual === 'object') {
+            for (i in actual) {
+                if (typeof actual[i] === 'function') {
+                    continue;
+                }
+                if (!deepAlmostEqual(actual[i], expected[i], delta)) {
+                    error.message = ' at key ' + i;
+                    if (Array.isArray(actual[i]) || typeof actual[i] === 'object') {
+                        error.message += ': ' + actual[i] + ' should be almost equal to ' + expected[i];
+                    }
 
-		var i;
-		if (Array.isArray(actual)) {
-			for (i = 0; i < actual.length; i++) {
-				if (!deepAlmostEqual(actual[i], expected[i], delta)) {
-					error.message = ' at index ' + i;
-					if (Array.isArray(actual[i]) || typeof actual[i] === 'object') {
-						error.message += ': ' + actual[i] + ' should be almost equal to ' + expected[i];
-					}
+                    return false;
+                }
+            }
+        } else {
+            return almostEqual(actual, expected, delta);
+        }
+        return true;
+    }
 
-					return false;
-				}
-			}
-		} else if (typeof actual === 'object') {
-			for (i in actual) {
-				if (typeof actual[i] === 'function') {
-					continue;
-				}
-				if (!deepAlmostEqual(actual[i], expected[i], delta)) {
-					error.message = ' at key ' + i;
-					if (Array.isArray(actual[i]) || typeof actual[i] === 'object') {
-						error.message += ': ' + actual[i] + ' should be almost equal to ' + expected[i];
-					}
+    Assertion.addMethod('deepAlmostEqual', function (expected, delta) {
+        var error = {};
+        this.assert(
+            deepAlmostEqual(this._obj, expected, delta, error),
+            'expected #{act} to be almost equal to #{exp}' + error.message,
+            'expected #{act} to be not almost equal to #{exp}' + error.message,
+            expected,
+            this._obj
+        );
+    });
 
-					return false;
-				}
-			}
-		} else {
-			return almostEqual(actual, expected, delta);
-		}
-		return true;
-	}
+    function nearLatLng (expected, delta) {
+        delta = delta || 1e-4;
 
-	Assertion.addMethod('deepAlmostEqual', function (expected, delta) {
-		var error = {};
-		this.assert(
-			deepAlmostEqual(this._obj, expected, delta, error),
-			'expected #{act} to be almost equal to #{exp}' + error.message,
-			'expected #{act} to be not almost equal to #{exp}' + error.message,
-			expected,
-			this._obj
-		);
-	});
+        new Assertion(
+            this._obj,
+            'expected #{act} to be a L.LatLng object'
+        ).to.be.an.instanceof(L.LatLng);
 
-	function nearLatLng(expected, delta) {
-		delta = delta || 1e-4;
+        var actual = this._obj;
+        expected = L.latLng(expected);
 
-		new Assertion(
-			this._obj,
-			'expected #{act} to be a L.LatLng object'
-		).to.be.an.instanceof(L.LatLng);
+        this.assert(
+            deepAlmostEqual(actual, expected, delta),
+            'expected #{act} to be near #{exp}',
+            'expected #{act} not to be near #{exp}',
+            expected.toString(),
+            actual.toString()
+        );
+    }
+    Assertion.addMethod('nearLatLng', nearLatLng);
+    Assertion.addMethod('near', nearLatLng);
 
-		var actual = this._obj;
-		expected = L.latLng(expected);
+    Assertion.addMethod('zoom', function (zoom) {
+        new Assertion(
+            this._obj,
+            'expected #{act} to be a L.Map'
+        ).to.be.an.instanceof(L.Map);
 
-		this.assert(
-			deepAlmostEqual(actual, expected, delta),
-			'expected #{act} to be near #{exp}',
-			'expected #{act} not to be near #{exp}',
-			expected.toString(),
-			actual.toString()
-		);
-	}
-	Assertion.addMethod('nearLatLng', nearLatLng);
-	Assertion.addMethod('near', nearLatLng);
+        new Assertion(
+            zoom,
+            'expect zoom to be a number'
+        ).to.be.a('number');
 
-	Assertion.addMethod('zoom', function (zoom) {
-		new Assertion(
-			this._obj,
-			'expected #{act} to be a L.Map'
-		).to.be.an.instanceof(L.Map);
+        var actual = this._obj.getZoom();
 
-		new Assertion(
-			zoom,
-			'expect zoom to be a number'
-		).to.be.a('number');
+        this.assert(
+            actual === zoom,
+            'expected zoom #{act} to be #{exp}',
+            'expected zoom #{act} not to be #{exp}',
+            zoom,
+            actual
+        );
+    });
 
-		var actual = this._obj.getZoom();
+    Assertion.addMethod('view', function (center, zoom, delta) {
+        new Assertion(
+            this._obj,
+            'expected #{act} to be a L.Map'
+        ).to.be.an.instanceof(L.Map);
 
-		this.assert(
-			actual === zoom,
-			'expected zoom #{act} to be #{exp}',
-			'expected zoom #{act} not to be #{exp}',
-			zoom,
-			actual
-		);
-	});
+        var map = this._obj;
 
-	Assertion.addMethod('view', function (center, zoom, delta) {
-		new Assertion(
-			this._obj,
-			'expected #{act} to be a L.Map'
-		).to.be.an.instanceof(L.Map);
+        L.latLng(center)
+            .should.be.nearLatLng(map.getCenter(), delta);
 
-		var map = this._obj;
+        if (zoom !== undefined) {
+            map.should.have.zoom(zoom);
+        }
+    });
 
-		L.latLng(center)
-			.should.be.nearLatLng(map.getCenter(), delta);
+    return chai;
 
-		if (zoom !== undefined) {
-			map.should.have.zoom(zoom);
-		}
-	});
-
-	return chai;
-
-}, window));
+});
