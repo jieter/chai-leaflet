@@ -14,26 +14,19 @@
     "type": "git",
     "url": "git://github.com/jieter/chai-leaflet.git"
   },
-  "keywords": [
-    "chai",
-    "testing",
-    "assertions",
-    "leaflet",
-    "map",
-    "gis"
-  ],
+  "keywords": ["chai", "testing", "assertions", "leaflet", "map", "gis"],
   "author": "Jan Pieter Waagmeester <jieter@jieter.nl>",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^3.5.0",
-    "eslint": "^2.7.0",
-    "eslint-plugin-html": "^1.4.0",
-    "leaflet": "^1.0.0-rc.1",
-    "mocha": "^2.4.5",
+    "chai": "^4.1.0",
+    "eslint": "^4.3.0",
+    "eslint-plugin-html": "^3.1.1",
+    "leaflet": "^1.1.0",
+    "mocha": "^3.4.2",
     "mocha-phantomjs-core": "^2.0.1",
     "phantomjs-prebuilt": "^2.1.4"
   },
   "peerDependencies": {
-    "chai": "^3.5.0"
+    "chai": "^4.1.0"
   }
 }
