@@ -4,7 +4,7 @@
   "description": "Chai assertions to use with Leaflet map apps",
   "main": "chai-leaflet.js",
   "scripts": {
-    "test": "npm run lint && npm run test-browser",
+    "test": "npm run lint && npm run test-browser && npm run test-node",
     "lint": "eslint chai-leaflet.js test/*",
     "test-node": "mocha test/test.js",
     "test-browser": "phantomjs ./node_modules/mocha-phantomjs-core/mocha-phantomjs-core.js test/index.html",
@@ -14,7 +14,14 @@
     "type": "git",
     "url": "git://github.com/jieter/chai-leaflet.git"
   },
-  "keywords": ["chai", "testing", "assertions", "leaflet", "map", "gis"],
+  "keywords": [
+    "chai",
+    "testing",
+    "assertions",
+    "leaflet",
+    "map",
+    "gis"
+  ],
   "author": "Jan Pieter Waagmeester <jieter@jieter.nl>",
   "license": "MIT",
   "devDependencies": {
@@ -22,8 +29,10 @@
     "eslint": "^4.3.0",
     "eslint-plugin-html": "^3.1.1",
     "leaflet": "^1.1.0",
+    "leaflet-headless": "^0.2.6",
     "mocha": "^3.4.2",
     "mocha-phantomjs-core": "^2.0.1",
+    "mversion": "^1.10.1",
     "phantomjs-prebuilt": "^2.1.4"
   },
   "peerDependencies": {
